@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+@import "tailwindcss";
+
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 antialiased min-h-screen selection:bg-green-200 font-sans overflow-x-hidden;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.glass-panel {
+  @apply bg-white/80 backdrop-blur-2xl border border-green-100 rounded-3xl shadow-[0_8px_40px_0_rgba(0,128,0,0.08)];
+}
+
+.glass-card {
+  @apply bg-white backdrop-blur-lg border border-gray-100 rounded-2xl shadow-md transition-all duration-300 hover:shadow-green-100 hover:border-green-200;
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(22, 163, 74, 0.3);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(2deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 10s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Ensure no horizontal overflow */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Mobile — phones (< 640px) */
+@media (max-width: 639px) {
+  h1 { font-size: 2.5rem !important; }
+  h2 { font-size: 2rem !important; }
+  h3 { font-size: 1.25rem !important; }
+
+  .glass-panel {
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .glass-card {
+    border-radius: 1rem;
+  }
+
+  /* Force graph to fit mobile width */
+  canvas {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* Tablet — (640px–1023px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  h1 { font-size: 3.5rem !important; }
+
+  .glass-panel {
+    border-radius: 1.5rem;
+  }
+}
+
+/* Touch-friendly targets on mobile/tablet */
+@media (max-width: 1023px) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+

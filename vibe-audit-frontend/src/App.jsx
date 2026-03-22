@@ -33,7 +33,10 @@ function App() {
       if (url) {
         response = await fetch(`${API_BASE}/api/audit-url`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'bypass-tunnel-reminder': 'true'
+          },
           body: JSON.stringify({ url })
         });
       } else {
@@ -41,6 +44,7 @@ function App() {
         formData.append('file', file);
         response = await fetch(`${API_BASE}/api/audit`, {
           method: 'POST',
+          headers: { 'bypass-tunnel-reminder': 'true' },
           body: formData,
         });
       }

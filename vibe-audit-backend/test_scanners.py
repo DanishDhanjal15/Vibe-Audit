@@ -25,7 +25,9 @@ class TestSecretScanner:
     """Tests for the secret/credential detection scanner."""
 
     def test_detects_aws_key(self):
-        repo = _create_temp_repo({"config.py": 'aws_key = "AKIAIOSFODNN7EXAMPLE1"'})
+        # Build fake key dynamically to avoid this test file being flagged
+        fake_key = "AKIA" + "IOSFODNN7EXAMPLE1"
+        repo = _create_temp_repo({"config.py": f'aws_key = "{fake_key}"'})
         try:
             issues = scan_secrets(repo)
             assert len(issues) >= 1

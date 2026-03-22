@@ -6,6 +6,7 @@ import { Zap, ShieldCheck, Clock, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const HISTORY_KEY = 'vibe_audit_history';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
 function loadHistory() {
   try {
@@ -30,7 +31,7 @@ function App() {
     try {
       let response;
       if (url) {
-        response = await fetch('http://127.0.0.1:8000/api/audit-url', {
+        response = await fetch(`${API_BASE}/api/audit-url`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url })
@@ -38,7 +39,7 @@ function App() {
       } else {
         const formData = new FormData();
         formData.append('file', file);
-        response = await fetch('http://127.0.0.1:8000/api/audit', {
+        response = await fetch(`${API_BASE}/api/audit`, {
           method: 'POST',
           body: formData,
         });

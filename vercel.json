@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd vibe-audit-frontend && npm install && npm run build",
+  "outputDirectory": "vibe-audit-frontend/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

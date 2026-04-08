@@ -168,7 +168,7 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, type: "spring" }}
             >
-              <ReportDashboard data={reportData} onReset={handleReset} />
+              <ReportDashboard data={reportData} apiBase={API_BASE} onReset={handleReset} />
             </motion.div>
           ) : (
             <motion.div

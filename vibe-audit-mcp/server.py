@@ -26,7 +26,8 @@ import mcp.types as types
 from mcp.server import Server
 
 # ─── Add backend scanner modules to path ──────────────────────────────────────
-BACKEND_DIR = Path(__file__).parent.parent / "vibe-audit-backend"
+# Resolve relative to this file so it's portable across machines.
+BACKEND_DIR = (Path(__file__).resolve().parent.parent / "vibe-audit-backend").resolve()
 sys.path.insert(0, str(BACKEND_DIR))
 
 from app.scanners.secrets import scan_secrets

@@ -5,7 +5,7 @@ import ForceGraph2D from 'react-force-graph-2d';
 import ExportModal from './ExportModal';
 import PatchModal from './PatchModal';
 
-export default function ReportDashboard({ data, onReset }) {
+export default function ReportDashboard({ data, apiBase, onReset }) {
   const { report, issues, graph, ai_dna } = data;
   const isGo = report.status === 'Go';
   const fgRef = useRef();
@@ -155,7 +155,10 @@ export default function ReportDashboard({ data, onReset }) {
               </div>
               <div className="flex-1">
                 <p className="text-2xl font-black text-gray-800 mb-2">{ai_dna.verdict}</p>
-                <p className="text-gray-500 leading-relaxed mb-4">Analyzed using 6 statistical signals: comment density, boilerplate phrases, try-catch ratio, variable naming entropy, function uniformity, and TODO absence rate.</p>
+                <p className="text-gray-500 leading-relaxed mb-4">Analyzed using statistical signals like comment density, boilerplate phrasing, try/catch ratio, TODO absence, variable-name patterns, function uniformity, and AI fingerprints.</p>
+                <p className="text-xs text-gray-400 font-mono mb-3">
+                  Backend: {apiBase} · AI-DNA: {ai_dna.version || 'unknown'}
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {['Comment Density', 'TODO Absence', 'Try-Catch Rate', 'Var Name Length', 'Boilerplate Phrases'].map(tag => (
                     <span key={tag} className="px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-xs font-bold border border-violet-200">{tag}</span>

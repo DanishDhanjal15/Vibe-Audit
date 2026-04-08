@@ -23,6 +23,10 @@ app.include_router(router)
 def read_root():
     return {"message": "Vibe-Audit API is running! 🚀"}
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 @app.get("/api/badge")
 def get_badge(score: int = Query(default=0, ge=0, le=100)):
     """Returns a shields.io-style SVG security badge."""

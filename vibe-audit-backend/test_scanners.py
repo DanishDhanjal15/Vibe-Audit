@@ -120,3 +120,28 @@ class TestComplianceScanner:
             assert len(issues) == 0
         finally:
             shutil.rmtree(repo)
+
+
+class TestDependencyScanner:
+    def test_detects_nested_package_json_in_monorepo(self, monkeypatch):
+        class _Resp:
+            def __init__(self, status_code): self.status_code = status_code
+
+        def fake_get(url, timeout=5):
+            # Anything ending with definitely-not-a-real-pkg should be 404
+            if url.endswith("/definitely-not-a-real-pkg-xyz"):
+                return _Resp(404)
+            return _Resp(200)
+
+        monkeypatch.setattr("app.scanners.dependencies.requests.get", fake_get)
+
+        repo = _create_temp_repo({
+            "frontend/package.json": '{"dependencies":{"definitely-not-a-real-pkg-xyz":"^1.0.0"}}',
+            "backend/app.py": "print('ok')\n",
+        })
+        try:
+            issues = scan_deps(repo)
+            assert any(i["package"] == "definitely-not-a-real-pkg-xyz" for i in issues)
+            assert any(i["file"] == "frontend/package.json" for i in issues)
+        finally:
+            shutil.rmtree(repo)

@@ -94,7 +94,10 @@ async def run_audit(file: UploadFile = File(...)):
         with open(zip_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         extract_dir = os.path.join(temp_dir, "extracted")
-        extract_zip(zip_path, extract_dir)
+        try:
+            extract_zip(zip_path, extract_dir)
+        except ValueError as ve:
+            raise HTTPException(status_code=400, detail=str(ve))
         return run_scanners_and_score(extract_dir)
     finally:
         robust_cleanup(temp_dir)

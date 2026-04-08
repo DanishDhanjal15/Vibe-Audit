@@ -8,6 +8,10 @@ import PatchModal from './PatchModal';
 export default function ReportDashboard({ data, apiBase, onReset }) {
   const { report, issues, graph, ai_dna } = data;
   const isGo = report.status === 'Go';
+  const showAiDebug = (() => {
+    try { return new URLSearchParams(window.location.search).has('aiDebug'); }
+    catch { return false; }
+  })();
   const fgRef = useRef();
   const graphContainerRef = useRef();
   const [showExport, setShowExport] = useState(false);
@@ -159,6 +163,11 @@ export default function ReportDashboard({ data, apiBase, onReset }) {
                 <p className="text-xs text-gray-400 font-mono mb-3">
                   Backend: {apiBase} · AI-DNA: {ai_dna.version || 'unknown'}
                 </p>
+                {showAiDebug && ai_dna.debug && (
+                  <pre className="text-[11px] leading-relaxed bg-white/70 border border-violet-100 rounded-xl p-3 mb-3 text-gray-600 overflow-x-auto">
+{JSON.stringify(ai_dna.debug, null, 2)}
+                  </pre>
+                )}
                 <div className="flex flex-wrap gap-2">
                   {['Comment Density', 'TODO Absence', 'Try-Catch Rate', 'Var Name Length', 'Boilerplate Phrases'].map(tag => (
                     <span key={tag} className="px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-xs font-bold border border-violet-200">{tag}</span>

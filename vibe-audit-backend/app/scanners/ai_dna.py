@@ -215,7 +215,7 @@ def scan_ai_dna(extract_dir: str) -> dict:
 
     if not per_file:
         return {
-            'version': 'ai-dna-v2.1',
+            'version': 'ai-dna-v2.2',
             'overall_confidence': 0,
             'files': [],
             'verdict': 'Unknown',
@@ -256,6 +256,12 @@ def scan_ai_dna(extract_dir: str) -> dict:
 
     overall = int(round(max(weighted_mean, p75, min(100.0, frac_score + frac_boost))))
 
+    # Calibration: if a meaningful fraction of lines look strongly AI-like,
+    # cap the "likely AI-generated" floor so we don't get stuck in the low 70s.
+    max_conf = max(f['confidence'] for f in per_file) if per_file else 0
+    if strong_frac >= 0.30 and max_conf >= 90:
+        overall = max(overall, 85)
+
     verdict = (
         'Almost certainly AI-generated' if overall >= 80 else
         'Likely AI-generated' if overall >= 60 else
@@ -266,7 +272,7 @@ def scan_ai_dna(extract_dir: str) -> dict:
     per_file.sort(key=lambda x: x['confidence'], reverse=True)
 
     return {
-        'version': 'ai-dna-v2.1',
+        'version': 'ai-dna-v2.2',
         'overall_confidence': overall,
         'files': per_file[:10],  # top 10 most AI-looking files
         'verdict': verdict,
@@ -276,5 +282,6 @@ def scan_ai_dna(extract_dir: str) -> dict:
             'strong_frac': round(strong_frac, 4),
             'weighted_mean': round(float(weighted_mean), 2),
             'p75': int(p75),
+            'max_conf': int(max_conf),
         }
     }
